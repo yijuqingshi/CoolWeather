@@ -1,5 +1,6 @@
 package com.topwise.coolweather;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -75,11 +76,9 @@ public class AreaFragment extends Fragment {
 
                 switch (mCurrentLevel) {
                     case CITY_LEVEL:
-                        Log.d("-------------", "CITY_LEVEL: " + mCurrentLevel);
                         loadProvince();
                         break;
                     case COUNTY_LEVEL:
-                        Log.d("-------------", "COUNTY_LEVEL: " + mCurrentLevel);
                         loadCity();
                         break;
                 }
@@ -94,7 +93,7 @@ public class AreaFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (mCurrentLevel) {
@@ -107,8 +106,11 @@ public class AreaFragment extends Fragment {
                         loadCounty();
                         break;
                     case COUNTY_LEVEL:
-
-
+                        County current = mCountyList.get(i);
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weatherId", current.getWeatherId());
+                         startActivity(intent);
+                        getActivity().finish();
                         break;
 
 

@@ -1,10 +1,14 @@
 package com.topwise.coolweather.utils;
 
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.topwise.coolweather.db.City;
 import com.topwise.coolweather.db.County;
 import com.topwise.coolweather.db.Province;
+import com.topwise.coolweather.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +40,7 @@ public class Utiloty {
         return false;
     }
 
-    public static boolean handleCityResponse(String response,int province) {
+    public static boolean handleCityResponse(String response, int province) {
 
         if (!TextUtils.isEmpty(response)) {
             try {
@@ -77,4 +81,21 @@ public class Utiloty {
         }
         return false;
     }
+
+
+    public static Weather handleWeatherResponse(String response) {
+        if (response != null &&!response.equals("")) {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+                String Json = jsonArray.getJSONObject(0).toString();
+                return new Gson().fromJson(Json, Weather.class);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
 }

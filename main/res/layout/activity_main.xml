@@ -6,7 +6,6 @@
     android:background="#FFF"
     tools:context="com.topwise.coolweather.MainActivity">
 
-
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"

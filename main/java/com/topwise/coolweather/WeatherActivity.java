@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.topwise.coolweather.gson.Forecast;
 import com.topwise.coolweather.gson.Weather;
+import com.topwise.coolweather.service.AutoUpdateService;
 import com.topwise.coolweather.utils.HttpURL;
 import com.topwise.coolweather.utils.HttpUtils;
 import com.topwise.coolweather.utils.SharedPreferencesUtils;
@@ -55,13 +56,11 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView mComf;
     private TextView mCw;
     private TextView mSpont;
-
     private String mWeatherJson;
     private String mWeatherId;
     private Button mBtm_Home;
     private Weather mWeather;
     private ImageView im_bg;
-    private Fragment choose_fg;
     public  SwipeRefreshLayout mRefreshLayout;
     public DrawerLayout mDrawerLayout;
 
@@ -93,7 +92,6 @@ public class WeatherActivity extends AppCompatActivity {
         mForecastLayout = (LinearLayout) findViewById(R.id.id_forecast_layout);
         mScrollView = (ScrollView) findViewById(R.id.id_weather_scrollview);
         mScrollView.setVisibility(View.VISIBLE);
-        Log.d("WeatherActivity", "initViews:  + WeatherId = " + mWeatherId);
         mWeatherJson = SharedPreferencesUtils.getValue("weatherJson");
         String imageUrl = SharedPreferencesUtils.getValue("image_url");
         if (!imageUrl.equals("")) {
@@ -125,24 +123,29 @@ public class WeatherActivity extends AppCompatActivity {
 
     }
 
-    public void requsetWeather(String mWeatherId) {
+    public void requsetWeather(final String mWeatherId) {
        this.mWeatherId = mWeatherId;
-        HttpUtils.getInstance().setOkHttpRequest(HttpURL.getWeatherUrl(mWeatherId, "cc34f83971e843088c67e12eb64a4a92"), new Callback() {
+       String s =  HttpURL.getWeatherUrl(mWeatherId);
+        Log.d("------------------", "run: " + "请求的URL = " +s);
+        HttpUtils.getInstance().setOkHttpRequest(HttpURL.getWeatherUrl(mWeatherId), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(WeatherActivity.this, "加载天气失败1", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WeatherActivity.this, "加载天气失败", Toast.LENGTH_SHORT).show();
                         mRefreshLayout.setRefreshing(false);
+
                     }
                 });
+                e.printStackTrace();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.code() == 200) {
                     mWeatherJson = response.body().string();
+                    Log.d("-------", "onResponse: " + mWeatherJson);
                     mWeather = Utiloty.handleWeatherResponse(mWeatherJson);
                     runOnUiThread(new Runnable() {
                         @Override
@@ -150,8 +153,10 @@ public class WeatherActivity extends AppCompatActivity {
                             if (mWeather != null && mWeather.status.equals("ok")) {
                                 SharedPreferencesUtils.putValue("weatherJson", mWeatherJson);
                                 showWeatherInfo(mWeather);
+                                Intent intent = new Intent(WeatherActivity.this, AutoUpdateService.class);
+                                startActivity(intent);
                             } else {
-                                Toast.makeText(WeatherActivity.this, "加载天气失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(WeatherActivity.this, "加载天气失败1", Toast.LENGTH_SHORT).show();
 
                             }
                             mRefreshLayout.setRefreshing(false);

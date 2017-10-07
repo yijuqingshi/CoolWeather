@@ -22,12 +22,13 @@ public class HttpURL {
     }
 
 
-    public static String getWeatherUrl(String wheatherId,String Key)
+    public static String getWeatherUrl(String wheatherId)
     {
 
-        return  WEATHER_URL+wheatherId+"&key=" +Key;
+        return  WEATHER_URL+wheatherId+"&key=cc34f83971e843088c67e12eb64a4a92";
 
     }
+
 
 
 

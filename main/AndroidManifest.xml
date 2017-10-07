@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.topwise.coolweather">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".CoolWeatherApplication"
         android:allowBackup="true"
@@ -20,6 +20,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".WeatherActivity" />
+
+        <service
+            android:name=".service.AutoUpdateService"
+            android:enabled="false"
+            android:exported="false"></service>
     </application>
 
 </manifest>

@@ -19,6 +19,7 @@ import com.topwise.coolweather.R;
 import com.topwise.coolweather.db.City;
 import com.topwise.coolweather.db.County;
 import com.topwise.coolweather.db.Province;
+import com.topwise.coolweather.gson.Weather;
 import com.topwise.coolweather.utils.HttpURL;
 import com.topwise.coolweather.utils.HttpUtils;
 import com.topwise.coolweather.utils.Utiloty;
@@ -107,10 +108,18 @@ public class AreaFragment extends Fragment {
                         break;
                     case COUNTY_LEVEL:
                         County current = mCountyList.get(i);
-                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                        intent.putExtra("weatherId", current.getWeatherId());
-                         startActivity(intent);
-                        getActivity().finish();
+                        String id = current.getWeatherId();
+                        if (getActivity() instanceof MainActivity) {
+                            Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                            intent.putExtra("weatherId", id);
+                            startActivity(intent);
+                            getActivity().finish();
+                        } else if (getActivity() instanceof WeatherActivity) {
+                            WeatherActivity mWeatherActivity = (WeatherActivity) getActivity();
+                            mWeatherActivity.mRefreshLayout.setRefreshing(true);
+                            mWeatherActivity.mDrawerLayout.closeDrawers();
+                            mWeatherActivity.requsetWeather(id);
+                        }
                         break;
 
 

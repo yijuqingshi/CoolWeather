@@ -3,6 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize">
 
+
+    <Button
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/home"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/id_title_btn_area"/>
+
     <TextView
         android:id="@+id/id_title_tv_location"
         android:textColor="#fff"

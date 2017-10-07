@@ -8,7 +8,7 @@ public class HttpURL {
 
     public static final  String PROVINCE_URL = "http://guolin.tech/api/china";
     public static final  String WEATHER_URL = "http://guolin.tech/api/weather?cityid=";
-
+    public static final  String IMAGE_URL= "http://guolin.tech/api/bing_pic";
 
     public static String getProvinceAllCityUrl(int ProvinceId)
     {
